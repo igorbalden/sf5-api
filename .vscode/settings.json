@@ -1,0 +1,5 @@
+{
+  "phpunit.code_path": "/app/src",
+  "phpunit.docker_name": "sf5-jwt_php_1",
+  "phpunit.exec": "/app/vendor/bin/phpunit"
+}
