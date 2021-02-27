@@ -2,3 +2,13 @@ register:
   path: /register
   controller: App\Controller\UsersController::register
   methods: post
+
+login:
+  path: /login
+  controller: App\Controller\UsersController::login
+  methods: post
+
+users:
+  path: /users
+  controller: App\Controller\UsersController::users
+  methods: get

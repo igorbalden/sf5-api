@@ -19,6 +19,13 @@ class UsersRepository extends ServiceEntityRepository
         parent::__construct($registry, Users::class);
     }
 
+    public function store(Users $user): string {
+      // $mgr = $this->getEntityManager();
+      $this->_em->persist($user);
+      $this->_em->flush();
+      return $user->getEmail();
+    }
+
     /**
      * Don't need to use custom sql for insert, update, delete
      */
@@ -29,11 +36,32 @@ class UsersRepository extends ServiceEntityRepository
       return $stmt->fetchOne();
     }
 
-    public function store(Users $user): string {
-      // $mgr = $this->getEntityManager();
-      $this->_em->persist($user);
-      $this->_em->flush();
-      return $user->getEmail();
+    public function authenticate(Users $user): ?Users {
+      $u_found = $this->findOneByEmail($user->getEmail());
+      if (!$u_found) {
+        return null;
+      }
+      if (!password_verify($user->getPassword(), $u_found->getPassword())) {
+        return null;
+      }
+      return $u_found;
+    }
+
+    public function findOneByEmail($value): ?Users {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.email = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function getAll(): array {
+        return $this->createQueryBuilder('u')
+            ->select('u.id, u.name, u.email')
+            ->getQuery()
+            ->getArrayResult()
+        ;
     }
 
     // /**
@@ -52,16 +80,5 @@ class UsersRepository extends ServiceEntityRepository
         ;
     }
     */
-
-    /*
-    public function findOneBySomeField($value): ?Users
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+    
 }
