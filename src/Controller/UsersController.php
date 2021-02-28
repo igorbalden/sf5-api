@@ -7,6 +7,7 @@ use App\Domain\Users\ListUsers;
 use App\Domain\Users\Registration;
 use App\Validation\UsersValidator;
 use App\Domain\Users\Authentication;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,12 +30,20 @@ class UsersController extends AbstractController {
   }
 
   public function login(Request $req, Authentication $authentication): Response {
-    $msg = $authentication->login($req);
-    return new Response($msg, 200);
+    $res = new Response();
+    $auth_arr = $authentication->login($req);
+    if (array_key_exists('error', $auth_arr)) {
+      $msg = json_encode($auth_arr);
+    } else {
+      $msg = json_encode(['Authorization' => $auth_arr['Authorization']]);
+    }
+    $res->setContent($msg);
+    $res->setStatusCode(200);
+    return $res;
   }
 
   public function users(Request $req, ListUsers $listUsers): Response {
-    $jwt_user = JwtAuth::getJwtContent($req);
+    $jwt_user = JwtAuth::decodeJwt($req);
     $msg = $listUsers->listUsers($req);
     return new Response($msg, 200);
   }

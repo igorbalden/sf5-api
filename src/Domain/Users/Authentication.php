@@ -12,7 +12,7 @@ class Authentication extends BaseUsers {
     return false;
   }
 
-  public function login(Request $req): string {
+  public function login(Request $req): array {
     $user = new Users();
     $input_obj = json_decode($req->getContent());
     $user->setEmail($input_obj->email);
@@ -20,10 +20,10 @@ class Authentication extends BaseUsers {
     $new_user = $this->users_repo->authenticate($user);
     if ($new_user) {
       $token = JwtAuth::getJwt($new_user);
-      return json_encode(['Authorization' => 'Bearer '. $token]);
+      return ['Authorization' => $token,];
     } else {
-      return json_encode(['error' => 'Email or password incorrect.']);
+      return ['error' => 'Email or password incorrect.'];
     }
   }
-  
+
 }

@@ -5,31 +5,27 @@ namespace App\Authentication;
 use App\Entity\Users;
 use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class JwtAuth {
 
   static public function getJwt(Users $user): string {
     $payload = [
       'uid' => $user->getId(),
-      'email' => $user->getEmail(),
+      'uemail' => $user->getEmail(),
       "iss" => "http://192.168.99.102:8000",
       'iat' => time(),
-      'exp' => time() + (1 * 30),  // * 24 * 60 seconds
+      'exp' => time() + (1 * 24 * 60 * 60),   // 1 day
     ];
-    return JWT::encode($payload, $_ENV['APP_SECRET'], 'HS256');
+    return 'Bearer '. JWT::encode($payload, $_ENV['APP_SECRET'], 'HS256');
   }
   
-  static public function getJwtContent(Request $req) {
+  static public function decodeJwt(Request $req) {
     $auth = $req->headers->get('authorization');
     if (! $auth) {
       throw new \UnexpectedValueException('Header error.', 403);
     }
     $token = explode(' ', $auth)[1];
-    if (! $token) {
-      throw new \UnexpectedValueException('Token header error.', 403);
-    }
-    JWT::$leeway = 10; // $leeway in seconds
+    JWT::$leeway = 2 * 60; // $leeway in seconds
     try {
       $decoded = JWT::decode($token, $_ENV['APP_SECRET'], array('HS256'));
     } catch (\Firebase\JWT\SignatureInvalidException $exception) {
