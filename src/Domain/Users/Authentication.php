@@ -4,6 +4,7 @@ namespace App\Domain\Users;
 
 use App\Entity\Users;
 use App\Authentication\JwtAuth;
+use App\Authentication\JwtBuilder;
 use Symfony\Component\HttpFoundation\Request;
 
 class Authentication extends BaseUsers {
@@ -12,17 +13,18 @@ class Authentication extends BaseUsers {
     return false;
   }
 
-  public function login(Request $req): array {
+  public function login(Request $req): ?JwtAuth {
     $user = new Users();
     $input_obj = json_decode($req->getContent());
     $user->setEmail($input_obj->email);
     $user->setPassword($input_obj->password);
-    $new_user = $this->users_repo->authenticate($user);
-    if ($new_user) {
-      $token = JwtAuth::getJwt($new_user);
-      return ['Authorization' => $token,];
+    $repo_user = $this->users_repo->authenticate($user);
+    if (! $repo_user) {
+      return null;
     } else {
-      return ['error' => 'Email or password incorrect.'];
+      $jwt_auth = $this->jwt_builder->getJwtAuth();
+      $jwt_auth->getJwt($repo_user);
+      return $jwt_auth;
     }
   }
 

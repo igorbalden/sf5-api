@@ -16,7 +16,7 @@ Create a directory, and clone the repo in it.
 
     git clone https://github.com/igorbalden/sf5-api.git ./
 
-  	php composer.phar install
+  	composer install
 
 Copy `./env` to `.env.local`. Edit it, if so needed.  
 
@@ -24,13 +24,22 @@ Create a MySql database and run the migration.
 
 
 Usage
------
+-----  
+#### Option 1.  
 
 If you have [installed Symfony][4] binary, run this command:
 
 ```bash
 $ cd my_project/
 $ symfony serve -d
+```
+
+#### Option 2.  
+Start Docker by  
+
+```bash
+$ cd my_project/
+$ docker-compose up -d
 ```
 
 Then start the client application to use it,  

@@ -4,6 +4,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    # JWT carrier. Used by App\Authentication\JwtBuilder
+    # possible values: header, header-cookie, cookie
+    # TODO build client for 'cookie' option
+    jwt_channel: 'header'
 
 services:
     # default configuration for services in *this* file
