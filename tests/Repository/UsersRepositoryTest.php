@@ -25,7 +25,7 @@ class UsersRepositoryTest extends KernelTestCase
         parent::tearDown();
         // doing this is recommended to avoid memory leaks
         $this->entityManager->close();
-        $this->entityManager = null;
+        unset($this->entityManager);
     }    
 
     // public function store_user(Users $user): string {

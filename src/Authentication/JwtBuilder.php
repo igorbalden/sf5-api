@@ -26,7 +26,7 @@ class JwtBuilder {
     if ($class_name === '') {
       throw new \RuntimeException('Jwt channel error.');
     }
-    $class_name = '\App\Authentication\\'. $class_name;
+    $class_name = __NAMESPACE__. '\\'. $class_name;
     return new $class_name;
   }
 

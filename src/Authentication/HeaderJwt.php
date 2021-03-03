@@ -6,12 +6,9 @@ use App\Entity\Users;
 use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Request;
 
-class HeaderJwt implements JwtAuth {
+class HeaderJwt extends JwtAuth {
 
-  public $header_token;
-  public $cookie_token;
-
-  public function getJwt(Users $user): void {
+  public function makeJwt(Users $user): void {
     $payload = [
       'uid' => $user->getId(),
       'uemail' => $user->getEmail(),
@@ -24,7 +21,7 @@ class HeaderJwt implements JwtAuth {
     $this->cookie_token = null;
   }
   
-  public function decodeJwt(Request $req) {
+  public function decodeJwt(Request $req): \stdClass {
     $auth = $req->headers->get('authorization');
     if (! $auth) {
       throw new \UnexpectedValueException('Header error.', 403);

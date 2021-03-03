@@ -5,10 +5,13 @@ namespace App\Authentication;
 use App\Entity\Users;
 use Symfony\Component\HttpFoundation\Request;
 
-interface JwtAuth {
+abstract class JwtAuth {
 
-  public function getJwt(Users $user);
+  public $header_token;
+  public $cookie_token;
 
-  public function decodeJwt(Request $req);
+  abstract public function makeJwt(Users $user): void;
+
+  abstract public function decodeJwt(Request $req): \stdClass;
 
 }

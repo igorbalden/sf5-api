@@ -1,13 +1,13 @@
 <?php 
 
-namespace App\Tests;
+namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DefaultControllerTest extends WebTestCase {
 
   /** @test */
-  public function check_if_phpunit_works() {
+  public function check_if_phpunit_works(): void {
     $client = $this->createClient();
     $client->request('GET', '/');
     

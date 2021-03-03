@@ -7,10 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Registration extends BaseUsers {
 
-  public function index() {
-    return false;
-  }
-
   public function register(Request $req): string {
     $user = new Users();
     $input_obj = json_decode($req->getContent());

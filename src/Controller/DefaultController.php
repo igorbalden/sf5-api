@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DefaultController extends AbstractController {
 
-  public function index() {
+  public function index(): Response {
     return new Response('Symfony Api', 200);
   }
 

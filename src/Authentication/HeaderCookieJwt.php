@@ -7,12 +7,9 @@ use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 
-class HeaderCookieJwt implements JwtAuth {
+class HeaderCookieJwt extends JwtAuth {
 
-  public $header_token;
-  public $cookie_token;
-
-  public function getJwt(Users $user): void {
+  public function makeJwt(Users $user): void {
     $payload = [
       'uid' => $user->getId(),
       'uemail' => $user->getEmail(),
@@ -35,7 +32,7 @@ class HeaderCookieJwt implements JwtAuth {
       ->withSameSite('None');
   }
 
-  public function decodeJwt(Request $req) {
+  public function decodeJwt(Request $req): \stdClass {
     $auth = $req->headers->get('authorization');
     if (! $auth) {
       throw new \UnexpectedValueException('Header error.', 403);

@@ -29,7 +29,7 @@ class UsersRepository extends ServiceEntityRepository
     /**
      * Don't need to use custom sql for insert, update, delete
      */
-    public function db_selectById(int $id) {
+    public function db_selectById(int $id): ?Users {
       $conn = $this->_em->getConnection();
       $stmt = $conn->prepare("SELECT name FROM users WHERE id= :id");
       $stmt->execute(['id' => $id]);
@@ -47,7 +47,7 @@ class UsersRepository extends ServiceEntityRepository
       return $u_found;
     }
 
-    public function findOneByEmail($value): ?Users {
+    public function findOneByEmail(string $value): ?Users {
         return $this->createQueryBuilder('u')
             ->andWhere('u.email = :val')
             ->setParameter('val', $value)

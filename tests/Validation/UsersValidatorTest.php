@@ -11,7 +11,7 @@ class UsersValidatorTest extends WebTestCase {
    * @test 
    * @dataProvider provideInputs
    */
-  public function validation_in_register($inp, $exp) {
+  public function validation_in_register(string $inp, string $exp): void {
     $client = self::createClient();
     $client->xmlHttpRequest('post', '/register', [], [],
       ['CONTENT_TYPE' => 'application/json',],
@@ -22,7 +22,7 @@ class UsersValidatorTest extends WebTestCase {
     $this->assertStringContainsString($exp, (string) $errors);
   }
 
-  public function provideInputs() {
+  public function provideInputs(): array {
     return [
       ['{"name":"","email":"","password":"1"}', 'name'],
       ['{"name":"","email":"","password":"1"}', 'email'],
