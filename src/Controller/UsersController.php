@@ -29,7 +29,7 @@ class UsersController extends AbstractController {
   public function register(Request $req, Registration $registration): Response {
     $errors = $this->user_validator->register($req);
     if ($errors !== '[]') {
-      return new Response(json_encode(['errors' => $errors]), 200);
+      return new Response(json_encode(['error' => $errors]), 400);
     }
     $msg = $registration->register($req);
     return new Response($msg, 201);
@@ -41,10 +41,13 @@ class UsersController extends AbstractController {
     $cont_arr = [];
     if (is_null($jwt)) {
       $cont_arr = ['error' => 'Email or password incorrect.'];
-    }
+      $res->setContent(json_encode($cont_arr));
+      $res->setStatusCode(403);
+      return $res;
+    } 
     if ($jwt->header_token) {
       $cont_arr = ['Authorization' => $jwt->header_token];
-    }
+    } 
     if ($jwt->cookie_token) {
       $res->headers->setCookie($jwt->cookie_token);
     }

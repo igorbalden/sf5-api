@@ -18,23 +18,26 @@ services:
           - "8443:443"
     php:
         build:
-            context: .
-            dockerfile: docker_dev/Dockerfile
+          context: .
+          dockerfile: docker_dev/Dockerfile
         volumes:
-            - ".:/app"
-            - "./docker_dev/php.ini:/usr/local/etc/php/conf.d/custom.ini"
+          - ".:/app"
+          - "./docker_dev/php.ini:/usr/local/etc/php/conf.d/custom.ini"
     #     depends_on:
     #       - db
-    # db:
-    #     image: mariadb
-        # command: 
-        #   "--innodb_use_native_aio=0"
-        # environment:
-        #   - MYSQL_DATABASE=
-        #   - MYSQL_ROOT_PASSWORD=root
-        #   - MYSQL_USER=root
-        #   - MYSQL_PASSWORD=root
-        # ports:
-        #   - "3307:3306"
-        # volumes:
-        #   - "./dbstore:/var/lib/mysql/"
+#     db:
+#         image: mariadb
+#         command: 
+#           "--innodb_use_native_aio=0"
+#         environment:
+#           - MYSQL_ROOT_PASSWORD=root
+#           - MYSQL_USER=root
+#           - MYSQL_PASSWORD=
+#         ports:
+#           - "3307:3306"
+#         volumes:
+#           - ".:/app"
+#           - "dbstore:/var/lib/mysql"
+
+# volumes:
+#   dbstore:

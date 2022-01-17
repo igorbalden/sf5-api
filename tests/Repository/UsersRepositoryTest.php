@@ -23,17 +23,28 @@ class UsersRepositoryTest extends KernelTestCase
 
     protected function tearDown(): void {
         parent::tearDown();
+        $dlt = $this->entityManager->createQueryBuilder()
+          ->delete('App:Users', 'u')                
+          ->where('u.id > 0');
+        $query = $dlt->getQuery();
+        $query->execute();
         // doing this is recommended to avoid memory leaks
         $this->entityManager->close();
         unset($this->entityManager);
     }    
 
-    // public function store_user(Users $user): string {
-    //   // $mgr = $this->getEntityManager();
-    //   $this->_em->persist($user);
-    //   // $this->_em->flush($user);
-    //   return $user->getEmail();
-    // }
+    /** @test */
+    public function store_user(): void {
+      self::bootKernel();
+      $user = new Users;
+      $user->setName('okl');
+      $user->setEmail('okl@ok.ok');
+      $user->setPassword('password');
+      $this->entityManager->persist($user);
+      $this->entityManager->flush();
+      $this->assertIsInt($user->getId());
+      $this->assertEquals('okl@ok.ok', $user->getEmail());
+    }
 
     // /**
     //  * @return Users[] Returns an array of Users objects
